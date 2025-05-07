@@ -32,8 +32,8 @@ export default function AboutScreen({ onBack }) {
               <p>📍 {personalData.address}</p>
               <p>📧 <a href={`mailto:${personalData.email}`} className="text-blue-600 underline">{personalData.email}</a></p>
               <p>📞 {personalData.phone}</p>
-              <p>🔗 <a href={personalData.github} target="_blank" className="text-blue-600 underline">GitHub</a> | 
-                <a href={personalData.linkedIn} target="_blank" className="text-blue-600 underline ml-2">LinkedIn</a>
+              <p>🔗 <a href={personalData.github} target="_blank" rel="noreferrer" className="text-blue-600 underline">GitHub</a> | 
+                <a href={personalData.linkedIn} target="_blank" rel="noreferrer" className="text-blue-600 underline ml-2">LinkedIn</a>
               </p>
             </div>
           </div>
