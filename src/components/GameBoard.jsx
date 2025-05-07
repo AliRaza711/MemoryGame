@@ -19,6 +19,8 @@ export default function GameBoard({ difficulty, theme, onBack }) {
   };
 
   const totalUniqueCards = difficultyCount[difficulty];
+  const bestTimeKey = `bestTime-${difficulty}`;
+  const bestMovesKey = `bestMoves-${difficulty}`;
 
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);
@@ -29,10 +31,10 @@ export default function GameBoard({ difficulty, theme, onBack }) {
   const timerRef = useRef(null);
 
   const [bestTime, setBestTime] = useState(() =>
-    Number(localStorage.getItem("bestTime")) || null
+    Number(localStorage.getItem(bestTimeKey)) || null
   );
   const [bestMoves, setBestMoves] = useState(() =>
-    Number(localStorage.getItem("bestMoves")) || null
+    Number(localStorage.getItem(bestMovesKey)) || null
   );
 
   useEffect(() => {
@@ -64,19 +66,25 @@ export default function GameBoard({ difficulty, theme, onBack }) {
     if (matched.length === totalUniqueCards) {
       clearInterval(timerRef.current);
       setGameWon(true);
-      if (
-        (!bestTime && !bestMoves) || // no best score yet
-        (moves < bestMoves) || // fewer moves
-        (moves === bestMoves && time < bestTime) || // same moves, faster time
-        (time === bestTime && moves < bestMoves) // same time, fewer moves
-      ) {
+
+      const storedTime = Number(localStorage.getItem(bestTimeKey));
+      const storedMoves = Number(localStorage.getItem(bestMovesKey));
+
+      const noBestYet = !storedTime && !storedMoves;
+
+      const isBetter =
+        (moves < storedMoves) ||
+        (moves === storedMoves && time < storedTime) ||
+        (time === storedTime && moves < storedMoves);
+
+      if (noBestYet || isBetter) {
         setBestTime(time);
         setBestMoves(moves);
-        localStorage.setItem("bestTime", time);
-        localStorage.setItem("bestMoves", moves);
-      }      
+        localStorage.setItem(bestTimeKey, time);
+        localStorage.setItem(bestMovesKey, moves);
+      }
     }
-  }, [matched, totalUniqueCards, time, moves, bestTime, bestMoves]);
+  }, [matched, totalUniqueCards, time, moves, bestTimeKey, bestMovesKey]);
 
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
@@ -109,7 +117,6 @@ export default function GameBoard({ difficulty, theme, onBack }) {
           <span>🏆 Best Time: {bestTime ?? "--"}</span>
           <span>💡 Best Moves: {bestMoves ?? "--"}</span>
         </div>
-        
       </div>
 
       <div className="grid grid-cols-4 gap-3 max-w-md mx-auto">
@@ -127,11 +134,11 @@ export default function GameBoard({ difficulty, theme, onBack }) {
       </div>
 
       <button
-          onClick={onBack}
-          className="flex mt-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-        >
-          🔙 Back
-        </button>
+        onClick={onBack}
+        className="flex mt-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+      >
+        🔙 Back
+      </button>
 
       {gameWon && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">

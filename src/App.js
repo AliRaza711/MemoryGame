@@ -3,12 +3,13 @@ import { useState } from "react";
 import StartScreen from "./components/StartScreen";
 import GameBoard from "./components/GameBoard";
 import AboutScreen from "./components/AboutScreen";
+import BestScoresScreen from "./components/BestScoreScreen"; // 👈 Add this line
 
 const difficulties = ["Easy", "Medium", "Hard", "Difficult"];
 const themes = ["Sport", "Flag", "Technology"];
 
 export default function App() {
-  const [screen, setScreen] = useState("start"); // 'start', 'game', 'about'
+  const [screen, setScreen] = useState("start"); // 'start', 'game', 'about', 'best'
   const [difficulty, setDifficulty] = useState("Easy");
   const [theme, setTheme] = useState("Sport");
 
@@ -32,6 +33,7 @@ export default function App() {
           onAbout={() => setScreen("about")}
           onTheme={toggleTheme}
           theme={theme}
+          onBestScores={() => setScreen("best")} // 👈 Add this
         />
       )}
 
@@ -41,6 +43,10 @@ export default function App() {
 
       {screen === "about" && (
         <AboutScreen onBack={() => setScreen("start")} />
+      )}
+
+      {screen === "best" && (
+        <BestScoresScreen onBack={() => setScreen("start")} />
       )}
     </>
   );
