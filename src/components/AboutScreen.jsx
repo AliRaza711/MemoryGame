@@ -11,11 +11,13 @@ export default function AboutScreen({ onBack }) {
         {/* Developer First */}
         <h2 className="text-3xl font-bold text-indigo-700 text-center mb-6">👨‍💻 Developer</h2>
         <div className="flex flex-col md:flex-row gap-6 items-center mb-10">
-          <img
-            src={personalData.profile}
-            alt={personalData.name}
-            className="w-35 h-35 object-cover rounded-full border-4 border-indigo-300 shadow-md"
-          />
+        <div className="flex-shrink-0">
+    <img
+      src={personalData.profile}
+      alt={personalData.name}
+      className="w-24 h-24 md:w-28 md:h-28 object-cover object-top rounded-full border-4 border-indigo-300 shadow-md"
+    />
+  </div>
           <div className="text-center md:text-left">
             <h3 className="text-xl font-bold text-gray-800">{personalData.name}</h3>
             <p className="text-sm text-gray-700 mb-1">{personalData.designation}</p>
