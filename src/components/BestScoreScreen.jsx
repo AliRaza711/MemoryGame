@@ -1,18 +1,32 @@
-// src/components/BestScoresScreen.jsx
+import { useEffect, useState } from "react";
+
 const difficulties = ["Easy", "Medium", "Hard", "Difficult"];
 
 export default function BestScoresScreen({ onBack }) {
+  const [bg, setBg] = useState("/bg.png");
+
+  useEffect(() => {
+    const updateBg = () => {
+      setBg(window.innerWidth < 768 ? "/mobile-bg.png" : "/bg.png");
+    };
+    updateBg();
+    window.addEventListener("resize", updateBg);
+    return () => window.removeEventListener("resize", updateBg);
+  }, []);
+
   const handleResetScores = () => {
     difficulties.forEach((level) => {
       localStorage.removeItem(`bestTime-${level}`);
       localStorage.removeItem(`bestMoves-${level}`);
     });
-    // Refresh page or force re-render
     window.location.reload();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-blue-100 py-8 px-4">
+    <div
+      className="min-h-screen bg-cover bg-center py-8 px-4"
+      style={{ backgroundImage: `url('${bg}')` }}
+    >
       <div className="max-w-xl mx-auto bg-white/70 backdrop-blur-md p-6 rounded-lg shadow-md text-center">
         <h1 className="text-3xl font-bold text-indigo-700 mb-6">🏅 Best Scores</h1>
 
